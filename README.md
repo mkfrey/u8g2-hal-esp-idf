@@ -61,12 +61,15 @@ be `U8G2_ESP32_HAL_UNDEFINED` which is the default initialization value.
 Remember, ESP32 pins are not hard-coded to functions and as such, all the GPIO pins on the ESP32 are open for use.  Following
 this initialization, we can use U8g2 as normal and described in the U8g2 documentation.
 
-## Compiling U8G2
+## Installation
 To use the actual U8g2 library in your ESP32 project, perform the following steps:
 
 1. Create a directory called `components` in your main project directory.
 2. Change into the `components` directory.
-3. Run `git clone https://github.com/olikraus/u8g2.git` to bring in a the latest copy of u8g2 library.
+3. Run `git clone https://github.com/mkfrey/u8g2-hal-esp-idf.git` to bring in the latest copy of this library.
+4. Run `git clone https://github.com/olikraus/u8g2.git` to bring in a the latest copy of u8g2 library.
+
+If your project itself is a git repository, you should consider using `git submodule add` instead of cloning.
 
 ## Development
 While in principal, there should be nothing specific needed beyond this addition to make U8g2 work on the ESP32, only a small
