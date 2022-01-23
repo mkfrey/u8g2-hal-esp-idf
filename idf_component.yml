@@ -4,3 +4,6 @@ url: https://github.com/mdvorak/esp-u8g2-hal.git
 dependencies:
   idf:
     version: ">=4.1"
+targets:
+  - esp32
+  - esp32s2
