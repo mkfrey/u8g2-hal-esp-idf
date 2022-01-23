@@ -1,0 +1,20 @@
+{
+    "name": "u8g2-hal",
+    "description": "U8g2 HAL compatibility layer for ESP modules.",
+    "keywords": "esp esp32",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/mdvorak/esp-u8g2-hal.git"
+    },
+    "authors": [
+        {
+            "name": "Michal Dvorak",
+            "email": "mikee2185@gmail.com",
+            "maintainer": true
+        }
+    ],
+    "frameworks": "espidf",
+    "platforms": "espressif32",
+    "includeDir": "include",
+    "srcDir": "src"
+}

@@ -1,0 +1,11 @@
+managed_components/
+dist/
+.pio/
+.vscode/
+.idea/
+*.iml
+CMakeListsPrivate.txt
+cmake-build-*/
+build/
+sdkconfig
+sdkconfig.old

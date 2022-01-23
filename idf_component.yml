@@ -1,0 +1,6 @@
+name: u8g2_hal
+description: U8g2 HAL compatibility layer for ESP modules.
+url: https://github.com/mdvorak/esp-u8g2-hal.git
+dependencies:
+  idf:
+    version: ">=4.1"
