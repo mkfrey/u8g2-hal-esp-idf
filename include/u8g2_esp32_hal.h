@@ -15,6 +15,10 @@
 #include "driver/i2c.h"
 #include "driver/spi_master.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define U8G2_ESP32_HAL_UNDEFINED (-1)
 
 #define I2C_MASTER_NUM I2C_NUM_1     //  I2C port number for master dev
@@ -53,6 +57,11 @@ uint8_t u8g2_esp32_gpio_and_delay_cb(u8x8_t* u8x8,
                                      uint8_t msg,
                                      uint8_t arg_int,
                                      void* arg_ptr);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* U8G2_ESP32_HAL_H_ */
 
 #endif
