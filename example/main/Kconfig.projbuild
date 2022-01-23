@@ -1,0 +1,11 @@
+menu "Example config"
+    choice EXAMPLE_INTERFACE_TYPE
+        prompt "Example display interface type"
+        default EXAMPLE_INTERFACE_I2C
+
+        config EXAMPLE_INTERFACE_I2C
+            bool "I2C"
+        config EXAMPLE_INTERFACE_SPI
+            bool "SPI"
+    endchoice
+endmenu
