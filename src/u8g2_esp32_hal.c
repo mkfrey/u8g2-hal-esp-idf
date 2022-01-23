@@ -141,12 +141,12 @@ uint8_t u8g2_esp32_i2c_byte_cb(u8x8_t* u8x8,
       ESP_LOGI(TAG, "scl_io_num %d", u8g2_esp32_hal.scl);
       conf.scl_io_num = u8g2_esp32_hal.scl;
       conf.scl_pullup_en = GPIO_PULLUP_ENABLE;
-      ESP_LOGI(TAG, "clk_speed %d", I2C_MASTER_FREQ_HZ);
-      conf.master.clk_speed = I2C_MASTER_FREQ_HZ;
+      ESP_LOGI(TAG, "clk_speed %d", u8g2_esp32_hal.i2c_clk_speed);
+      conf.master.clk_speed = u8g2_esp32_hal.i2c_clk_speed;
       ESP_LOGI(TAG, "i2c_param_config %d", conf.mode);
-      ESP_ERROR_CHECK(i2c_param_config(I2C_MASTER_NUM, &conf));
-      ESP_LOGI(TAG, "i2c_driver_install %d", I2C_MASTER_NUM);
-      ESP_ERROR_CHECK(i2c_driver_install(I2C_MASTER_NUM, conf.mode,
+      ESP_ERROR_CHECK(i2c_param_config(u8g2_esp32_hal.i2c_num, &conf));
+      ESP_LOGI(TAG, "i2c_driver_install %d", u8g2_esp32_hal.i2c_num);
+      ESP_ERROR_CHECK(i2c_driver_install(u8g2_esp32_hal.i2c_num, conf.mode,
                                          I2C_MASTER_RX_BUF_DISABLE,
                                          I2C_MASTER_TX_BUF_DISABLE, 0));
       break;
@@ -178,7 +178,7 @@ uint8_t u8g2_esp32_i2c_byte_cb(u8x8_t* u8x8,
     case U8X8_MSG_BYTE_END_TRANSFER: {
       ESP_LOGD(TAG, "End I2C transfer.");
       ESP_ERROR_CHECK(i2c_master_stop(handle_i2c));
-      ESP_ERROR_CHECK(i2c_master_cmd_begin(I2C_MASTER_NUM, handle_i2c,
+      ESP_ERROR_CHECK(i2c_master_cmd_begin(u8g2_esp32_hal.i2c_num, handle_i2c,
                                            I2C_TIMEOUT_MS / portTICK_RATE_MS));
       i2c_cmd_link_delete(handle_i2c);
       break;

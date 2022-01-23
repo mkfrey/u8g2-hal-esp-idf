@@ -34,14 +34,21 @@ typedef struct {
   gpio_num_t cs;
   gpio_num_t reset;
   gpio_num_t dc;
+  i2c_port_t i2c_num;
+  uint32_t i2c_clk_speed;
 } u8g2_esp32_hal_t;
 
-#define U8G2_ESP32_HAL_DEFAULT                              \
-  {                                                         \
-    U8G2_ESP32_HAL_UNDEFINED, U8G2_ESP32_HAL_UNDEFINED,     \
-        U8G2_ESP32_HAL_UNDEFINED, U8G2_ESP32_HAL_UNDEFINED, \
-        U8G2_ESP32_HAL_UNDEFINED, U8G2_ESP32_HAL_UNDEFINED, \
-        U8G2_ESP32_HAL_UNDEFINED                            \
+#define U8G2_ESP32_HAL_DEFAULT  \
+  {                             \
+    U8G2_ESP32_HAL_UNDEFINED,   \
+    U8G2_ESP32_HAL_UNDEFINED, \
+    U8G2_ESP32_HAL_UNDEFINED, \
+    U8G2_ESP32_HAL_UNDEFINED, \
+    U8G2_ESP32_HAL_UNDEFINED, \
+    U8G2_ESP32_HAL_UNDEFINED, \
+    U8G2_ESP32_HAL_UNDEFINED, \
+    I2C_MASTER_NUM,           \
+    I2C_MASTER_FREQ_HZ        \
   }
 
 void u8g2_esp32_hal_init(u8g2_esp32_hal_t u8g2_esp32_hal_param);
