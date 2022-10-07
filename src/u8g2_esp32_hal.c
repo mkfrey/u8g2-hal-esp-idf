@@ -61,9 +61,9 @@ uint8_t u8g2_esp32_spi_byte_cb(u8x8_t* u8x8,
       memset(&bus_config, 0, sizeof(spi_bus_config_t));
       bus_config.sclk_io_num = u8g2_esp32_hal.clk;   // CLK
       bus_config.mosi_io_num = u8g2_esp32_hal.mosi;  // MOSI
-      bus_config.miso_io_num = -1;                   // MISO
-      bus_config.quadwp_io_num = -1;                 // Not used
-      bus_config.quadhd_io_num = -1;                 // Not used
+      bus_config.miso_io_num = GPIO_NUM_NC;          // MISO
+      bus_config.quadwp_io_num = GPIO_NUM_NC;        // Not used
+      bus_config.quadhd_io_num = GPIO_NUM_NC;        // Not used
       // ESP_LOGI(TAG, "... Initializing bus.");
       ESP_ERROR_CHECK(spi_bus_initialize(HSPI_HOST, &bus_config, 1));
 
