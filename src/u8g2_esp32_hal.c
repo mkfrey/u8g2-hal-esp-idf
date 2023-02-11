@@ -16,6 +16,12 @@ static spi_device_handle_t handle_spi;   // SPI handle.
 static i2c_cmd_handle_t handle_i2c;      // I2C handle.
 static u8g2_esp32_hal_t u8g2_esp32_hal;  // HAL state data.
 
+#if ESP_IDF_VERSION < ESP_IDF_VERSION_VAL(4, 0, 0)
+#define HOST    HSPI_HOST
+#else
+#define HOST    SPI2_HOST
+#endif
+
 #undef ESP_ERROR_CHECK
 #define ESP_ERROR_CHECK(x)                   \
   do {                                       \
@@ -65,7 +71,7 @@ uint8_t u8g2_esp32_spi_byte_cb(u8x8_t* u8x8,
       bus_config.quadwp_io_num = -1;                 // Not used
       bus_config.quadhd_io_num = -1;                 // Not used
       // ESP_LOGI(TAG, "... Initializing bus.");
-      ESP_ERROR_CHECK(spi_bus_initialize(HSPI_HOST, &bus_config, 1));
+      ESP_ERROR_CHECK(spi_bus_initialize(HOST, &bus_config, 1));
 
       spi_device_interface_config_t dev_config;
       dev_config.address_bits = 0;
@@ -82,7 +88,7 @@ uint8_t u8g2_esp32_spi_byte_cb(u8x8_t* u8x8,
       dev_config.pre_cb = NULL;
       dev_config.post_cb = NULL;
       // ESP_LOGI(TAG, "... Adding device bus.");
-      ESP_ERROR_CHECK(spi_bus_add_device(HSPI_HOST, &dev_config, &handle_spi));
+      ESP_ERROR_CHECK(spi_bus_add_device(HOST, &dev_config, &handle_spi));
 
       break;
     }
@@ -176,7 +182,7 @@ uint8_t u8g2_esp32_i2c_byte_cb(u8x8_t* u8x8,
       ESP_LOGD(TAG, "End I2C transfer.");
       ESP_ERROR_CHECK(i2c_master_stop(handle_i2c));
       ESP_ERROR_CHECK(i2c_master_cmd_begin(I2C_MASTER_NUM, handle_i2c,
-                                           I2C_TIMEOUT_MS / portTICK_RATE_MS));
+                                           pdMS_TO_TICKS(I2C_TIMEOUT_MS)));
       i2c_cmd_link_delete(handle_i2c);
       break;
     }
