@@ -24,24 +24,51 @@
 #define ACK_CHECK_EN 0x1             //  I2C master will check ack from slave
 #define ACK_CHECK_DIS 0x0  //  I2C master will not check ack from slave
 
+/** @public
+ * HAL configuration structure.
+ */
 typedef struct {
-  gpio_num_t clk;
-  gpio_num_t mosi;
-  gpio_num_t sda;  // data for I²C
-  gpio_num_t scl;  // clock for I²C
-  gpio_num_t cs;
+  union {
+    /* SPI settings. */
+    struct {
+      /* GPIO num for clock. */
+      gpio_num_t clk;
+      /* GPIO num for SPI mosi. */
+      gpio_num_t mosi;
+      /* GPIO num for SPI slave/chip select. */
+      gpio_num_t cs;
+    } spi;
+    /* I2C settings. */
+    struct {
+      /* GPIO num for I2C data. */
+      gpio_num_t sda;
+      /* GPIO num for I2C clock. */
+      gpio_num_t scl;
+    } i2c;
+  } bus;
+  /* GPIO num for reset. */
   gpio_num_t reset;
+  /* GPIO num for DC. */
   gpio_num_t dc;
 } u8g2_esp32_hal_t;
 
-#define U8G2_ESP32_HAL_DEFAULT                              \
-  {                                                         \
-    U8G2_ESP32_HAL_UNDEFINED, U8G2_ESP32_HAL_UNDEFINED,     \
-        U8G2_ESP32_HAL_UNDEFINED, U8G2_ESP32_HAL_UNDEFINED, \
-        U8G2_ESP32_HAL_UNDEFINED, U8G2_ESP32_HAL_UNDEFINED, \
-        U8G2_ESP32_HAL_UNDEFINED                            \
+/**
+ * Construct a default HAL configuration with all fields undefined.
+ */
+#define U8G2_ESP32_HAL_DEFAULT                                        \
+  {                                                                   \
+    .bus = {.spi = {.clk = U8G2_ESP32_HAL_UNDEFINED,                  \
+                    .mosi = U8G2_ESP32_HAL_UNDEFINED,                 \
+                    .cs = U8G2_ESP32_HAL_UNDEFINED}},                 \
+    .reset = U8G2_ESP32_HAL_UNDEFINED, .dc = U8G2_ESP32_HAL_UNDEFINED \
   }
 
+/**
+ * Initialize the HAL with the given configuration.
+ *
+ * @see u8g2_esp32_hal_t
+ * @see U8G2_ESP32_HAL_DEFAULT
+ */
 void u8g2_esp32_hal_init(u8g2_esp32_hal_t u8g2_esp32_hal_param);
 uint8_t u8g2_esp32_spi_byte_cb(u8x8_t* u8x8,
                                uint8_t msg,

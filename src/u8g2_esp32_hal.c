@@ -51,19 +51,19 @@ uint8_t u8g2_esp32_spi_byte_cb(u8x8_t* u8x8,
       break;
 
     case U8X8_MSG_BYTE_INIT: {
-      if (u8g2_esp32_hal.clk == U8G2_ESP32_HAL_UNDEFINED ||
-          u8g2_esp32_hal.mosi == U8G2_ESP32_HAL_UNDEFINED ||
-          u8g2_esp32_hal.cs == U8G2_ESP32_HAL_UNDEFINED) {
+      if (u8g2_esp32_hal.bus.spi.clk == U8G2_ESP32_HAL_UNDEFINED ||
+          u8g2_esp32_hal.bus.spi.mosi == U8G2_ESP32_HAL_UNDEFINED ||
+          u8g2_esp32_hal.bus.spi.cs == U8G2_ESP32_HAL_UNDEFINED) {
         break;
       }
 
       spi_bus_config_t bus_config;
       memset(&bus_config, 0, sizeof(spi_bus_config_t));
-      bus_config.sclk_io_num = u8g2_esp32_hal.clk;   // CLK
-      bus_config.mosi_io_num = u8g2_esp32_hal.mosi;  // MOSI
-      bus_config.miso_io_num = GPIO_NUM_NC;          // MISO
-      bus_config.quadwp_io_num = GPIO_NUM_NC;        // Not used
-      bus_config.quadhd_io_num = GPIO_NUM_NC;        // Not used
+      bus_config.sclk_io_num = u8g2_esp32_hal.bus.spi.clk;   // CLK
+      bus_config.mosi_io_num = u8g2_esp32_hal.bus.spi.mosi;  // MOSI
+      bus_config.miso_io_num = GPIO_NUM_NC;                  // MISO
+      bus_config.quadwp_io_num = GPIO_NUM_NC;                // Not used
+      bus_config.quadhd_io_num = GPIO_NUM_NC;                // Not used
       // ESP_LOGI(TAG, "... Initializing bus.");
       ESP_ERROR_CHECK(spi_bus_initialize(HSPI_HOST, &bus_config, 1));
 
@@ -76,7 +76,7 @@ uint8_t u8g2_esp32_spi_byte_cb(u8x8_t* u8x8,
       dev_config.cs_ena_posttrans = 0;
       dev_config.cs_ena_pretrans = 0;
       dev_config.clock_speed_hz = 10000;
-      dev_config.spics_io_num = u8g2_esp32_hal.cs;
+      dev_config.spics_io_num = u8g2_esp32_hal.bus.spi.cs;
       dev_config.flags = 0;
       dev_config.queue_size = 200;
       dev_config.pre_cb = NULL;
@@ -125,18 +125,18 @@ uint8_t u8g2_esp32_i2c_byte_cb(u8x8_t* u8x8,
     }
 
     case U8X8_MSG_BYTE_INIT: {
-      if (u8g2_esp32_hal.sda == U8G2_ESP32_HAL_UNDEFINED ||
-          u8g2_esp32_hal.scl == U8G2_ESP32_HAL_UNDEFINED) {
+      if (u8g2_esp32_hal.bus.i2c.sda == U8G2_ESP32_HAL_UNDEFINED ||
+          u8g2_esp32_hal.bus.i2c.scl == U8G2_ESP32_HAL_UNDEFINED) {
         break;
       }
 
       i2c_config_t conf = {0};
       conf.mode = I2C_MODE_MASTER;
-      ESP_LOGI(TAG, "sda_io_num %d", u8g2_esp32_hal.sda);
-      conf.sda_io_num = u8g2_esp32_hal.sda;
+      ESP_LOGI(TAG, "sda_io_num %d", u8g2_esp32_hal.bus.i2c.sda);
+      conf.sda_io_num = u8g2_esp32_hal.bus.i2c.sda;
       conf.sda_pullup_en = GPIO_PULLUP_ENABLE;
-      ESP_LOGI(TAG, "scl_io_num %d", u8g2_esp32_hal.scl);
-      conf.scl_io_num = u8g2_esp32_hal.scl;
+      ESP_LOGI(TAG, "scl_io_num %d", u8g2_esp32_hal.bus.i2c.scl);
+      conf.scl_io_num = u8g2_esp32_hal.bus.i2c.scl;
       conf.scl_pullup_en = GPIO_PULLUP_ENABLE;
       ESP_LOGI(TAG, "clk_speed %d", I2C_MASTER_FREQ_HZ);
       conf.master.clk_speed = I2C_MASTER_FREQ_HZ;
@@ -207,8 +207,8 @@ uint8_t u8g2_esp32_gpio_and_delay_cb(u8x8_t* u8x8,
       if (u8g2_esp32_hal.reset != U8G2_ESP32_HAL_UNDEFINED) {
         bitmask = bitmask | (1ull << u8g2_esp32_hal.reset);
       }
-      if (u8g2_esp32_hal.cs != U8G2_ESP32_HAL_UNDEFINED) {
-        bitmask = bitmask | (1ull << u8g2_esp32_hal.cs);
+      if (u8g2_esp32_hal.bus.spi.cs != U8G2_ESP32_HAL_UNDEFINED) {
+        bitmask = bitmask | (1ull << u8g2_esp32_hal.bus.spi.cs);
       }
 
       if (bitmask == 0) {
@@ -232,21 +232,21 @@ uint8_t u8g2_esp32_gpio_and_delay_cb(u8x8_t* u8x8,
       break;
       // Set the GPIO client select pin to the value passed in through arg_int.
     case U8X8_MSG_GPIO_CS:
-      if (u8g2_esp32_hal.cs != U8G2_ESP32_HAL_UNDEFINED) {
-        gpio_set_level(u8g2_esp32_hal.cs, arg_int);
+      if (u8g2_esp32_hal.bus.spi.cs != U8G2_ESP32_HAL_UNDEFINED) {
+        gpio_set_level(u8g2_esp32_hal.bus.spi.cs, arg_int);
       }
       break;
       // Set the Software I²C pin to the value passed in through arg_int.
     case U8X8_MSG_GPIO_I2C_CLOCK:
-      if (u8g2_esp32_hal.scl != U8G2_ESP32_HAL_UNDEFINED) {
-        gpio_set_level(u8g2_esp32_hal.scl, arg_int);
+      if (u8g2_esp32_hal.bus.i2c.scl != U8G2_ESP32_HAL_UNDEFINED) {
+        gpio_set_level(u8g2_esp32_hal.bus.i2c.scl, arg_int);
         //				printf("%c",(arg_int==1?'C':'c'));
       }
       break;
       // Set the Software I²C pin to the value passed in through arg_int.
     case U8X8_MSG_GPIO_I2C_DATA:
-      if (u8g2_esp32_hal.sda != U8G2_ESP32_HAL_UNDEFINED) {
-        gpio_set_level(u8g2_esp32_hal.sda, arg_int);
+      if (u8g2_esp32_hal.bus.i2c.sda != U8G2_ESP32_HAL_UNDEFINED) {
+        gpio_set_level(u8g2_esp32_hal.bus.i2c.sda, arg_int);
         //				printf("%c",(arg_int==1?'D':'d'));
       }
       break;
