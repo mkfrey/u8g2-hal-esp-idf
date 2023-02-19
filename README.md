@@ -6,7 +6,7 @@ This is effectively a fork of the U8G2 code that is part of Neil Kolban's excell
 His repository is no longer maintained and using a single directory as submodule is not possible. So I copied the relevant
 files and made them a functional component for esp-idf by creating the required build system files.
 
-This component should compile on both esp-idf version 3 and 4. It has been tested on 4.1.
+This component should compile on esp-idf versions 4.x upward. Versions 3.x are no longer supported.
 
 ## Description
 There is an excellent open source library called `u8g2` that can be found on Github here:
