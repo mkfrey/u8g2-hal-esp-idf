@@ -16,11 +16,7 @@ static spi_device_handle_t handle_spi;   // SPI handle.
 static i2c_cmd_handle_t handle_i2c;      // I2C handle.
 static u8g2_esp32_hal_t u8g2_esp32_hal;  // HAL state data.
 
-#if ESP_IDF_VERSION < ESP_IDF_VERSION_VAL(4, 0, 0)
-#define HOST    HSPI_HOST
-#else
 #define HOST    SPI2_HOST
-#endif
 
 #undef ESP_ERROR_CHECK
 #define ESP_ERROR_CHECK(x)                   \
