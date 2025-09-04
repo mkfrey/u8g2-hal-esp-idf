@@ -1,12 +1,12 @@
-# U8g2 compatibility component for esp-idf on ESP32
+# U8g2 compatibility component for ESP-IDF on ESP32
 ## Note
 This is effectively a fork of the U8G2 code that is part of Neil Kolban's excellent `esp32-snippets` repository. It can be found 
 [here](https://github.com/nkolban/esp32-snippets/tree/master/hardware/displays/U8G2).
 
 His repository is no longer maintained and using a single directory as submodule is not possible. So I copied the relevant
-files and made them a functional component for esp-idf by creating the required build system files.
+files and made them a functional component for ESP-IDF by creating the required build system files.
 
-This component should compile on esp-idf versions 4.x upward. Versions 3.x are no longer supported.
+This component should compile on ESP-IDF versions 5.x upward. Older versions are not supported.
 
 ## Description
 There is an excellent open source library called `u8g2` that can be found on Github here:
