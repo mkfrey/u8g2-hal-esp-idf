@@ -160,10 +160,14 @@ uint8_t u8g2_esp32_i2c_byte_cb(u8x8_t* u8x8,
 
       i2c_device_config_t dev_conf_i2c = {
         .dev_addr_length = I2C_ADDR_BIT_LEN_7,
-        .device_address = i2c_address,
+        // Bit shift by one to make it consistant with the old API
+        // which requires takes an address with the LSB (leftmost) bit being
+        // the read/write bit versus the new one which only takes the address
+        // unshifted
+        .device_address = i2c_address >> 1,
         .scl_speed_hz = I2C_MASTER_FREQ_HZ,
       };
-      ESP_LOGI(TAG, "i2c_device_address 0x%02x", i2c_address);
+      ESP_LOGI(TAG, "i2c_device_address 0x%02X", i2c_address >> 1);
       ESP_LOGI(TAG, "clk_speed %d", I2C_MASTER_FREQ_HZ);
 
       ESP_ERROR_CHECK(i2c_master_bus_add_device(bus_handle_i2c, &dev_conf_i2c, &dev_handle_i2c));
