@@ -12,6 +12,10 @@
 static const char* TAG = "u8g2_hal";
 static const unsigned int I2C_TIMEOUT_MS = 1000;
 
+#define I2C_BYTES_BUFFER_LEN 100
+uint8_t i2c_bytes_buffer[I2C_BYTES_BUFFER_LEN] = {0};
+uint8_t* i2c_bytes_buffer_ptr = i2c_bytes_buffer;
+
 static spi_device_handle_t handle_spi;   // SPI handle.
 static i2c_master_bus_handle_t bus_handle_i2c;      // I2C handle.
 static i2c_master_dev_handle_t dev_handle_i2c;      // I2C handle.
@@ -107,9 +111,6 @@ uint8_t u8g2_esp32_spi_byte_cb(u8x8_t* u8x8,
   return 0;
 }  // u8g2_esp32_spi_byte_cb
 
-#define BYTES_BUFFER_LEN 100
-uint8_t bytes_buffer[BYTES_BUFFER_LEN] = {0};
-uint8_t* bytes_buffer_ptr = bytes_buffer;
 /*
  * HAL callback function as prescribed by the U8G2 library.  This callback is
  * invoked to handle I2C communications.
@@ -165,20 +166,20 @@ uint8_t u8g2_esp32_i2c_byte_cb(u8x8_t* u8x8,
     case U8X8_MSG_BYTE_SEND: {
       uint8_t* data_ptr = (uint8_t*)arg_ptr;
       ESP_LOG_BUFFER_HEXDUMP(TAG, data_ptr, arg_int, ESP_LOG_VERBOSE);
-      memcpy(bytes_buffer_ptr,data_ptr,arg_int);
-      bytes_buffer_ptr += arg_int;
+      memcpy(i2c_bytes_buffer_ptr,data_ptr,arg_int);
+      i2c_bytes_buffer_ptr += arg_int;
       break;
     }
 
     case U8X8_MSG_BYTE_START_TRANSFER: {
       ESP_LOGD(TAG, "Start I2C transfer to %02X.", u8x8_GetI2CAddress(u8x8) >> 1);
-      bytes_buffer_ptr = bytes_buffer;
+      i2c_bytes_buffer_ptr = i2c_bytes_buffer;
       break;
     }
 
     case U8X8_MSG_BYTE_END_TRANSFER: {
       ESP_LOGD(TAG, "End I2C transfer.");
-      ESP_ERROR_CHECK(i2c_master_transmit(dev_handle_i2c, bytes_buffer,bytes_buffer_ptr - bytes_buffer,I2C_TIMEOUT_MS));
+      ESP_ERROR_CHECK(i2c_master_transmit(dev_handle_i2c, i2c_bytes_buffer,i2c_bytes_buffer_ptr - i2c_bytes_buffer,I2C_TIMEOUT_MS));
       break;
     }
   }
