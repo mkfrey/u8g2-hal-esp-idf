@@ -197,6 +197,15 @@ uint8_t u8g2_esp32_i2c_byte_cb(u8x8_t* u8x8,
 #ifdef U8G2_ESP32_HAL_USE_V2_I2C_API
       uint8_t* data_ptr = (uint8_t*)arg_ptr;
       ESP_LOG_BUFFER_HEXDUMP(TAG, data_ptr, arg_int, ESP_LOG_VERBOSE);
+      if(i2c_bytes_buffer_ptr - i2c_bytes_buffer + arg_int > I2C_BYTES_BUFFER_LEN){
+        ESP_LOGE(
+          TAG,
+          "The i2c message is too large for the bytes buffer. \
+          Current length required is %u but allocated is %u.",
+          i2c_bytes_buffer_ptr - i2c_bytes_buffer + arg_int,
+          I2C_BYTES_BUFFER_LEN
+        );
+      }
       memcpy(i2c_bytes_buffer_ptr,data_ptr,arg_int);
       i2c_bytes_buffer_ptr += arg_int;
 #else
