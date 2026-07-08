@@ -55,4 +55,3 @@ void task_test_SSD1306i2c(void* ignore) {
 
   vTaskDelete(NULL);
 }
-u
